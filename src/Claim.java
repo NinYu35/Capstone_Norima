@@ -55,7 +55,7 @@ public class Claim extends Validations {
                 int generateNum = random.nextInt(999999);
                 claimNo = String.format("C%06d", generateNum);
                 System.out.print(" Enter Date of Accident(YYYY-MM-DD)     ---> ");
-                this.dateOfAccident = validateDate("Date Of Accident","AccidentDate").trim();
+                this.dateOfAccident = validateAccidentDate().trim();
                 System.out.print(" Enter Address of Accident              ---> ");
                 this.addressAccidentHappened = validateAddress("AccidentClaim");
                 System.out.print(" Enter Description of Accident          ---> ");

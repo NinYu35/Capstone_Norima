@@ -75,7 +75,6 @@ public class Validations extends Helper{
     public String validateAlpha(String value, String purpose){
         String entered = input.nextLine();
         if (checkerAlpha(entered.trim()) && purpose.equals("CustomerAccount")){
-            System.out.println(checkerAlpha(entered));
             printBorder(37);
             printError("Please enter a valid " + value.toLowerCase() + "!");
             printBorder(37);
@@ -237,53 +236,6 @@ public class Validations extends Helper{
      */
     public String validateDate(String value, String purpose){
         String entered = input.nextLine();
-        if (checkerDate(entered) && purpose.equals("ChangeDate")){
-            printBorder(39);
-            printError("Please enter a valid " + value.toLowerCase() + "!");
-            printBorder(39);
-            System.out.print(" Enter " +value + " ---> ");
-            entered = validateDate(value, purpose);
-        }
-        policy.parseNewExpDate = LocalDate.parse(entered);
-        policy.parseEffDate = LocalDate.parse(policy.effectiveDate);
-        policy.sixMonthsPolicyTerm = policy.parseEffDate.plusMonths(6);
-        int diffInMonthsNewExpiryDate = policy.parseEffDate.compareTo(policy.parseNewExpDate);
-        int diffInMonthsOriginalExpiryDate = policy.sixMonthsPolicyTerm.compareTo(policy.parseNewExpDate);
-        if (!(diffInMonthsNewExpiryDate <= 0 && diffInMonthsOriginalExpiryDate >= 0) && purpose.equals("ChangeDate")){
-            printBorder(39);
-            printError("The new expiry date should be earlier date " +
-                    "\n       than originally specified.");
-            printBorder(39);
-            System.out.print(" " +value + " ---> ");
-            entered = validateDate(value, purpose);
-        }
-        LocalDate dateToday = LocalDate.now();
-        claim.parseDateOfAccident = LocalDate.parse(entered);
-        claim.parseEffectiveDate = LocalDate.parse(policy.getEffectiveDate());
-        claim.parseNewExpirationDate = LocalDate.parse(policy.getExpirationDate());
-        if ((claim.parseEffectiveDate.compareTo(claim.parseDateOfAccident) > 0)&& purpose.equals("AccidentDate")){
-            printBorder(61);
-            printError("Your Insurance Policy starts on " + claim.parseEffectiveDate + "."+
-                    " \n       You cannot file a claim.");
-            printBorder(61);
-            promptEnterKey();
-            main.menuChoice(); // return to menu
-        }
-        if ((dateToday.compareTo(claim.parseDateOfAccident) < 0)&& purpose.equals("AccidentDate")){
-            printBorder(61);
-            printError("You cannot file using a future date." +
-                    " \n       Only date today and previous are accepted!");
-            printBorder(61);
-            promptEnterKey();
-            main.menuChoice(); // return to menu
-        }
-        if (checkerDate(entered) && purpose.equals("AccidentDate")){
-            printBorder(61);
-            printError("Please enter a valid " + value.toLowerCase() + "!");
-            printBorder(61);
-            System.out.print(" Enter " + value + "(YYYY-MM-DD)     ---> ");
-            entered = validateDate(value, purpose);
-        }
         if (checkerDate(entered) && purpose.equals("DateOfBirth")){
             printBorder(55);
             printError("Please enter a valid " + value.toLowerCase() + "!");
@@ -298,23 +250,99 @@ public class Validations extends Helper{
             System.out.print(value + "(YYYY-MM-DD) ---> ");
             entered = validateDate(value, purpose);
         }
+        return entered;
+    }
 
-        if (checkerDate(entered) && purpose.equals("Policy")){
+    /**
+     * Method to validate if the String input of the user for effective date satisfies the regex condition allowed
+     * or entered an empty string and also the effective date must be today or beyond.
+     * @return entered - a recursive call , loops until its satisfies the condition
+     */
+    public String validateEffectiveDate() {
+        String entered = input.nextLine();
+        if (checkerDate(entered)){
             printBorder(55);
-            printError("Please enter a valid " + value.toLowerCase() + "!");
+            printError("Please enter a valid date!");
             printBorder(55);
-            System.out.print(" Enter " + value + " (YYYY-MM-DD)        ---> ");
-            entered = validateDate(value, purpose);
+            System.out.print(" Enter Effective Date (YYYY-MM-DD)        ---> ");
+            entered = validateEffectiveDate();
         }
         policy.effectDate = LocalDate.parse(entered);
-        if (LocalDate.now().compareTo(policy.effectDate) > 0 && purpose.equals("Policy")) {
+        if (LocalDate.now().compareTo(policy.effectDate) > 0 ) {
             printBorder(55);
             printError("Please Enter date today or beyond.");
             printBorder(55);
-            System.out.print(" Enter " + value + " (YYYY-MM-DD)        ---> ");
-            entered = validateDate(value,purpose);
+            System.out.print(" Enter Effective Date (YYYY-MM-DD)        ---> ");
+            entered = validateEffectiveDate();
         }
+        return entered;
+    }
 
+    /**
+     * Method to validate if the String input of the user for accident date satisfies the regex condition allowed
+     * or entered an empty string and also the accident date must be today or yesterday or happened within the policy
+     * period.
+     * @return entered - a recursive call , loops until its satisfies the condition
+     */
+    public String validateAccidentDate() {
+        String entered = input.nextLine();
+        if (checkerDate(entered)){
+            printBorder(61);
+            printError("Please enter a valid date!");
+            printBorder(61);
+            System.out.print(" Enter Date of Accident(YYYY-MM-DD)     ---> ");
+            entered = validateAccidentDate();
+        }
+        LocalDate dateToday = LocalDate.now();
+        claim.parseDateOfAccident = LocalDate.parse(entered);
+        claim.parseEffectiveDate = LocalDate.parse(policy.getEffectiveDate());
+        claim.parseNewExpirationDate = LocalDate.parse(policy.getExpirationDate());
+        if (claim.parseEffectiveDate.compareTo(claim.parseDateOfAccident) > 0){
+            printBorder(61);
+            printError("Your Insurance Policy starts on " + claim.parseEffectiveDate + "."+
+                    " \n       You cannot file a claim.");
+            printBorder(61);
+            promptEnterKey();
+            main.menuChoice(); // return to menu
+        }
+        if (dateToday.compareTo(claim.parseDateOfAccident) < 0){
+            printBorder(61);
+            printError("You cannot file using a future date." +
+                    " \n       Only date today and previous are accepted!");
+            printBorder(61);
+            promptEnterKey();
+            main.menuChoice(); // return to menu
+        }
+        return entered;
+    }
+
+    /**
+     * Method to validate if the String input of the user for new expiry date satisfies the regex condition allowed
+     * or entered an empty string and also the new expiry date should be earlier date than originally specified.
+     * @return entered - a recursive call , loops until its satisfies the condition
+     */
+    public String validateChangeDate(){
+        String entered = input.nextLine();
+        if (checkerDate(entered)){
+            printBorder(39);
+            printError("Please enter a valid date!");
+            printBorder(39);
+            System.out.print(" New Expiration Date ---> ");
+            entered = validateChangeDate();
+        }
+        policy.parseNewExpDate = LocalDate.parse(entered);
+        policy.parseEffDate = LocalDate.parse(policy.effectiveDate);
+        policy.sixMonthsPolicyTerm = policy.parseEffDate.plusMonths(6);
+        int diffInMonthsNewExpiryDate = policy.parseEffDate.compareTo(policy.parseNewExpDate);
+        int diffInMonthsOriginalExpiryDate = policy.sixMonthsPolicyTerm.compareTo(policy.parseNewExpDate);
+        if (!(diffInMonthsNewExpiryDate <= 0 && diffInMonthsOriginalExpiryDate >= 0)){
+            printBorder(39);
+            printError("The new expiry date should be earlier date " +
+                    "\n       than originally specified.");
+            printBorder(39);
+            System.out.print(" New Expiration Date ---> ");
+            entered = validateChangeDate();
+        }
         return entered;
     }
 
@@ -327,7 +355,7 @@ public class Validations extends Helper{
     public int nextValidYear(Scanner input) {
         while (!input.hasNextInt()) {
             System.out.print("\n Error: " + input.next() + " is not a valid year!\n"
-                                   + " \n Vehicle's Purchase Year                  ---> ");
+                    + " \n Vehicle's Purchase Year                  ---> ");
         }
         return input.nextInt();
     }
@@ -340,7 +368,7 @@ public class Validations extends Helper{
     public int nextValidInt(Scanner input) {
         while (!input.hasNextInt()) {
             System.out.print("\n Error: " + input.next() + " is not a valid number!\n"
-                                   + " \n Please enter a valid input (1-9)         ---> ");
+                    + " \n Please enter a valid input (1-9)         ---> ");
         }
         return input.nextInt();
     }
@@ -353,7 +381,7 @@ public class Validations extends Helper{
     public double nextValidPrice(Scanner input) {
         while (!input.hasNextDouble()) {
             System.out.print("\n Error: " + input.next() + " is not a valid number!\n"
-                                   + " \n Vehicle's Purchase Price                 ---> ");
+                    + " \n Vehicle's Purchase Price                 ---> ");
         }
         return input.nextDouble();
     }

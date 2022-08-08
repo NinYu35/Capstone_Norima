@@ -23,7 +23,6 @@ public class PASDriver extends Helper {
                 "", 0.0);
         main.menuChoice();
         input.close();
-
     }
 
 
@@ -33,6 +32,7 @@ public class PASDriver extends Helper {
     public void menuChoice() {
         int choice;
         try {
+            // Call and execute auto update of policy status
             autoUpdatePolicyStatus();
             printMenu();
             choice = input.nextInt();
@@ -64,6 +64,7 @@ public class PASDriver extends Helper {
                     break;
 
                 case 8:
+                    System.out.println(" \n Program is exiting ...");
                     System.exit(0);
                 default:
                     printError("Invalid input! Please Enter (1-8) of your Choice.");

@@ -54,7 +54,7 @@ public class Policy extends Validations {
                 int generateNum = random.nextInt(999999);
                 policyNo = String.format("%06d", generateNum);
                 System.out.print(" Enter Effective Date (YYYY-MM-DD)        ---> ");
-                this.effectiveDate = validateDate("Effective Date", "Policy").trim();
+                this.effectiveDate = validateEffectiveDate().trim();
                 expireDate = effectDate.plusMonths(6);
                 System.out.println(" Expiration Date                          ---> " + expireDate);
                 System.out.println(" Policy Number                            ---> " + policyNo);
@@ -105,7 +105,7 @@ public class Policy extends Validations {
                 checkStatus();
                 policyDateDisplay();
                 System.out.print(" New Expiration Date ---> ");
-                newExpiryDate = validateDate("New Expiration Date","ChangeDate").trim();
+                newExpiryDate = validateChangeDate().trim();
                 parseNewExpDate = LocalDate.parse(newExpiryDate);
                 updateOnDB("policy", "status", "Adjusted", "policy_no", policyNum);
                 updateOnDB("policy", "expiry_date", newExpiryDate, "policy_no", policyNum);
@@ -129,7 +129,6 @@ public class Policy extends Validations {
             System.out.print(" Enter Policy Number       ---> ");
             policyNum = validateNumber("Policy Number","SearchPolicyNumber").trim();
             printBorder(37);
-            System.out.println();
             selectPolicy(policyNum);
             if (!isPolicyExist) {
                 printError("Policy doesn't exist");
