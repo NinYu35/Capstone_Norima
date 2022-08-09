@@ -17,7 +17,7 @@ public class Helper  {
     public static Claim claim;
     public static Vehicle vehicle;
     static Scanner input = new Scanner(System.in);
-    static final String DB_URL ="jdbc:mysql://localhost/capstone_db";
+    static final String DB_URL ="jdbc:mysql://localhost/";
     static final String USER = "root";
     static final String PASSWORD = "root";
     Random random = new Random();
@@ -29,22 +29,98 @@ public class Helper  {
 
 
     /**
-     * Method for establishing connection to database and connects to database
+     * Method for establishing connection and creating database, tables, fields and values
      */
-    public void connectOnDB() {
-        try {
+        public void connectOnDB() {
+            String qryCreateDB = "CREATE DATABASE IF NOT EXISTS `pas_db`";
+            String qryUseDB = "USE `pas_db`";
+            String qryCustomerTable = "CREATE TABLE IF NOT EXISTS `customer_acct`("
+                    + "`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+                    + "`account_no` varchar(50) NOT NULL,"
+                    + "`first_name` varchar(50) NOT NULL,"
+                    + "`last_name` varchar(50) NOT NULL,"
+                    + "`address` varchar(50) NOT NULL"
+                    + ")";
+            String qryPolicyTable = "CREATE TABLE IF NOT EXISTS `policy` ("
+                    + "`id` int NOT NULL AUTO_INCREMENT,"
+                    + "`policy_no` varchar(50) NOT NULL,"
+                    + "`customer_acc_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',"
+                    + "`policy_holder_uuid` binary(36) DEFAULT NULL,"
+                    + "`effective_date` date DEFAULT NULL,"
+                    + "`expiry_date` date DEFAULT NULL,"
+                    + "`status` varchar(50) NOT NULL,"
+                    + "`cost` varchar(50) DEFAULT NULL,"
+                    + "`created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
+                    + "`updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
+                    + " PRIMARY KEY (`id`)"
+                    + ")";
 
-            //Construct a database 'Connection' object called 'conn'
-            conn = DriverManager.getConnection
-                    (DB_URL,USER,PASSWORD);
+            String qryHolderTable = "CREATE TABLE IF NOT EXISTS `policy_holder` ("
+                    + "`uuid` char(36) NOT NULL,"
+                    + "`policy_no` varchar(50) NOT NULL,"
+                    + "`customer_acc_no` varchar(50) NOT NULL,"
+                    + "`acc_type` varchar(50) NOT NULL,"
+                    + "`first_name` varchar(50) NOT NULL,"
+                    + "`last_name` varchar(50) NOT NULL,"
+                    + "`date_of_birth` date NOT NULL,"
+                    + "`address` varchar(50) NOT NULL,"
+                    + "`drivers_license_num` varchar(50) NOT NULL,"
+                    + "`drivers_license_issued` date NOT NULL,"
+                    + "`created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
+                    + "`updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
+                    + "PRIMARY KEY (`uuid`)"
+                    + ")";
+            String qryClaimTable = "CREATE TABLE IF NOT EXISTS `claim` ("
+                    + "`id` int NOT NULL AUTO_INCREMENT,"
+                    + "`policy_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,"
+                    + "`claim_no` varchar(50) NOT NULL,"
+                    + "`date_of_accident` date NOT NULL,"
+                    + "`address_of_accident` varchar(50) NOT NULL,"
+                    + "`desc_of_accident` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,"
+                    + "`desc_vehicle_damage` text,"
+                    + "`est_cost_repairs` double NOT NULL DEFAULT '0',"
+                    + "`created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
+                    + "`updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
+                    + "PRIMARY KEY (`id`)"
+                    + ")";
+            String qryVehicleTable = "CREATE TABLE IF NOT EXISTS `vehicle` ("
+                    + "`uuid` char(36) NOT NULL,"
+                    + "`customer_acc_no` varchar(50) NOT NULL DEFAULT '',"
+                    + "`policy_holder_uuid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',"
+                    + "`policy_no` varchar(50) NOT NULL DEFAULT '',"
+                    + "`make` varchar(50) NOT NULL,"
+                    + "`model` varchar(50) NOT NULL,"
+                    + "`year` int NOT NULL,"
+                    + "`type` varchar(50) NOT NULL,"
+                    + "`fuel_type` varchar(50) NOT NULL,"
+                    + "`color` varchar(50) NOT NULL,"
+                    + "`purchase_price` double NOT NULL DEFAULT '0',"
+                    + "`premium_charged` double NOT NULL DEFAULT '0',"
+                    + "`created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,"
+                    + "`updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
+                    + "PRIMARY KEY (`uuid`)"
+                    + ")";
 
-            //Construct a 'Statement' object called 'stmt' inside the Connection created
-            stmt = conn.createStatement();
+            try {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    } // End connectOnDB
+                //Construct a database 'Connection' object called 'conn'
+                conn = DriverManager.getConnection
+                        (DB_URL,USER,PASSWORD);
+
+                //Construct a 'Statement' object called 'stmt' inside the Connection created
+                stmt = conn.createStatement();
+                stmt.executeUpdate(qryCreateDB); //create database
+                stmt.execute(qryUseDB);
+                stmt.execute(qryCustomerTable); //create customer table
+                stmt.execute(qryPolicyTable); //create policy table
+                stmt.execute(qryHolderTable); //create policyholder table
+                stmt.execute(qryVehicleTable); //create vehicle table
+                stmt.execute(qryClaimTable); //create claim table
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } // End connectOnDB
 
     /**
      * Method for storing data in db

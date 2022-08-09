@@ -107,6 +107,7 @@ public class Policy extends Validations {
                 System.out.print(" New Expiration Date ---> ");
                 newExpiryDate = validateChangeDate().trim();
                 parseNewExpDate = LocalDate.parse(newExpiryDate);
+                // when the expiration date is changed, a status 'Adjusted' will reflect on policy's status on db
                 updateOnDB("policy", "status", "Adjusted", "policy_no", policyNum);
                 updateOnDB("policy", "expiry_date", newExpiryDate, "policy_no", policyNum);
                 policyNewDateDisplay();
