@@ -32,16 +32,16 @@ public class Helper  {
      * Method for establishing connection and creating database, tables, fields and values
      */
         public void connectOnDB() {
-            String qryCreateDB = "CREATE DATABASE IF NOT EXISTS `pas_db`";
-            String qryUseDB = "USE `pas_db`";
-            String qryCustomerTable = "CREATE TABLE IF NOT EXISTS `customer_acct`("
+            String queryCreateDB = "CREATE DATABASE IF NOT EXISTS `pas_db`";
+            String queryUseDB = "USE `pas_db`";
+            String queryCustomerTable = "CREATE TABLE IF NOT EXISTS `customer_acct`("
                     + "`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,"
                     + "`account_no` varchar(50) NOT NULL,"
                     + "`first_name` varchar(50) NOT NULL,"
                     + "`last_name` varchar(50) NOT NULL,"
                     + "`address` varchar(50) NOT NULL"
                     + ")";
-            String qryPolicyTable = "CREATE TABLE IF NOT EXISTS `policy` ("
+            String queryPolicyTable = "CREATE TABLE IF NOT EXISTS `policy` ("
                     + "`id` int NOT NULL AUTO_INCREMENT,"
                     + "`policy_no` varchar(50) NOT NULL,"
                     + "`customer_acc_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',"
@@ -55,7 +55,7 @@ public class Helper  {
                     + " PRIMARY KEY (`id`)"
                     + ")";
 
-            String qryHolderTable = "CREATE TABLE IF NOT EXISTS `policy_holder` ("
+            String queryHolderTable = "CREATE TABLE IF NOT EXISTS `policy_holder` ("
                     + "`uuid` char(36) NOT NULL,"
                     + "`policy_no` varchar(50) NOT NULL,"
                     + "`customer_acc_no` varchar(50) NOT NULL,"
@@ -70,7 +70,7 @@ public class Helper  {
                     + "`updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
                     + "PRIMARY KEY (`uuid`)"
                     + ")";
-            String qryClaimTable = "CREATE TABLE IF NOT EXISTS `claim` ("
+            String queryClaimTable = "CREATE TABLE IF NOT EXISTS `claim` ("
                     + "`id` int NOT NULL AUTO_INCREMENT,"
                     + "`policy_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,"
                     + "`claim_no` varchar(50) NOT NULL,"
@@ -83,7 +83,7 @@ public class Helper  {
                     + "`updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
                     + "PRIMARY KEY (`id`)"
                     + ")";
-            String qryVehicleTable = "CREATE TABLE IF NOT EXISTS `vehicle` ("
+            String queryVehicleTable = "CREATE TABLE IF NOT EXISTS `vehicle` ("
                     + "`uuid` char(36) NOT NULL,"
                     + "`customer_acc_no` varchar(50) NOT NULL DEFAULT '',"
                     + "`policy_holder_uuid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',"
@@ -109,13 +109,13 @@ public class Helper  {
 
                 //Construct a 'Statement' object called 'stmt' inside the Connection created
                 stmt = conn.createStatement();
-                stmt.executeUpdate(qryCreateDB); //create database
-                stmt.execute(qryUseDB);
-                stmt.execute(qryCustomerTable); //create customer table
-                stmt.execute(qryPolicyTable); //create policy table
-                stmt.execute(qryHolderTable); //create policyholder table
-                stmt.execute(qryVehicleTable); //create vehicle table
-                stmt.execute(qryClaimTable); //create claim table
+                stmt.executeUpdate(queryCreateDB); //create database
+                stmt.execute(queryUseDB);
+                stmt.execute(queryCustomerTable); //create customer table
+                stmt.execute(queryPolicyTable); //create policy table
+                stmt.execute(queryHolderTable); //create policyholder table
+                stmt.execute(queryVehicleTable); //create vehicle table
+                stmt.execute(queryClaimTable); //create claim table
 
             } catch (Exception e) {
                 e.printStackTrace();
