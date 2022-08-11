@@ -1,3 +1,12 @@
+/**
+ * Norima Course 4, Module 3, Java Certification Project
+ * Norima Java Developer Course Capstone Project
+ *
+ * @author : Niño Galanida
+ * Date Created : 06/23/2022
+ */
+
+
 import java.time.LocalDate;
 import java.util.Scanner;
 

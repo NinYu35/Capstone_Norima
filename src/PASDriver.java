@@ -8,9 +8,7 @@
 
 import java.util.Scanner;
 
-/**
- *
- */
+
 public class PASDriver extends Helper {
 
     public static void main(String[] args) {
