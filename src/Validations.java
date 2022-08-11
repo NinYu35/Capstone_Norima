@@ -195,7 +195,7 @@ public class Validations extends Helper{
             printBorder(39);
             printError("Please enter a valid " + value.toLowerCase() + "!");
             printBorder(39);
-            System.out.print(" Enter " + value + "                    ---> ");
+            System.out.print(" Enter " + value + "    ---> ");
             entered = validateNumber(value, purpose);
         }
         if (checkerNum(entered) && purpose.equals("PolicyNumber")){

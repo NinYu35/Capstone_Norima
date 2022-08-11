@@ -141,7 +141,7 @@ public class Vehicle extends PolicyHolder {
         }
         printBorder(119);
         System.out.println("                                    ~~~  Total Policy Premium Charged ---> "
-                                     + currency.format(totalCost) + "  ~~~                    ");
+                                     + currency.format(Double.valueOf(totalCost)) + "  ~~~                    ");
         buyPolicy(accountNo, policyNo, policyHolderUuid);
     }
 
