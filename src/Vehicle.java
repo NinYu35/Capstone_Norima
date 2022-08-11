@@ -28,6 +28,18 @@ public class Vehicle extends PolicyHolder {
     private final ArrayList<Vehicle> list = new ArrayList<>();
 
 
+    /**
+     * Parameterized Constructor of Class CustomerAccount
+     * @param make string parameter for vehicle's brand / make
+     * @param model string parameter for vehicle's model
+     * @param type string parameter for type of vehicle
+     * @param fuelType string parameter for vehicle's fuel
+     * @param uuid string parameter for vehicle's universally unique identifier (uuid)
+     * @param year int parameter for vehicle's year of purchase
+     * @param purchasePrice double parameter for vehicle's purchase price
+     * @param premiumCharged double parameter for vehicle's premium charge/cost
+     * @param color string parameter for vehicle's color
+     */
     public Vehicle(String make, String model, String type, String fuelType, String uuid,
                    int year, double purchasePrice, double premiumCharged, String color) {
         this.make = make;
@@ -42,8 +54,19 @@ public class Vehicle extends PolicyHolder {
     }
 
 
-    /*
-    user input for vehicle details
+    /**
+     * Method for vehicle details
+     * @param dlx double parameter for years in between the driver license issued date and today's date from PolicyHolder Class
+     * @param accountNo string parameter of customers account number
+     * @param policyHolderUuid string parameter for policyholder's
+     * @param policyNo string parameter for policy number
+     * @param firstNamePolHolder string parameter for policyholder's first name
+     * @param lastNamePolHolder string parameter for policyholder's last name
+     * @param accountType string parameter for policyholder's relationship with the customer account
+     * @param dateOfBirth string parameter for policyholder's date of birth
+     * @param address string parameter for policyholder's address
+     * @param driversLicenseNum string parameter for policyholder's driver's license number
+     * @param driversLicenseIssued string parameter for policyholder's drivers license date issued
      */
     public void load(double dlx, String accountNo, String policyHolderUuid, String policyNo, String firstNamePolHolder,
                      String lastNamePolHolder, String accountType, LocalDate dateOfBirth, String address,
@@ -78,7 +101,7 @@ public class Vehicle extends PolicyHolder {
                 System.out.println(" Premium Charged                          ---> "+ currency.format(premiumCharged));
                 printBorder(55);
                 totalCost = totalCost + premiumCharged;
-                uuid = getUUID();
+                uuid = getUUID(); // generate
                 list.add(new Vehicle(make, model, type, fuelType, uuid, year, purchasePrice, premiumCharged, color));
                 if (quantity == x) {
                     display(accountNo, policyNo, policyHolderUuid, firstNamePolHolder, lastNamePolHolder, accountType,
@@ -92,8 +115,8 @@ public class Vehicle extends PolicyHolder {
         }
     }
 
-    /*
-    display vehicle details
+    /**
+     * Method for displaying summary: policyholder details and vehicle details
      */
     public void display(String accountNo, String policyNo, String policyHolderUuid, String firstNamePolHolder,
                         String lastNamePolHolder, String accountType, LocalDate dateOfBirth, String address,
@@ -122,8 +145,8 @@ public class Vehicle extends PolicyHolder {
         buyPolicy(accountNo, policyNo, policyHolderUuid);
     }
 
-    /*
-    buy policy
+    /**
+     *Method for buying the policy
      */
     public void buyPolicy(String accountNo, String policyNo, String policyHolderUuid) {
         try {
@@ -147,9 +170,10 @@ public class Vehicle extends PolicyHolder {
         }
     }
 
-    /*
-    store policy holder details on database
-    */
+
+    /**
+     * Method for storing vehicle details on db
+     */
     public void store(String accountNo, String policyNo, String policyHolderUuid) {
         for (Vehicle vehicle : list) {
             String fields = "uuid, customer_acc_no, policy_holder_uuid, policy_no, make, model, year, type, fuel_type" +
@@ -163,9 +187,10 @@ public class Vehicle extends PolicyHolder {
         policy.updateOnDB("policy", "cost", String.valueOf(totalCost), "policy_no", policyNo);
         printSuccess("Policy Sold!");
     }
-    /*
-    displays the vehicle details
-    */
+
+    /**
+     * Method for vehicle display used in policy class
+     */
     public void vehicleDisplay() {
         System.out.format("%-10s %-10s %-15s %-15s %-15s %-15s %-15s %-30s%n", this.make, this.model,
                 this.type, this.fuelType, this.year, this.color,currency.format(this.purchasePrice),
@@ -173,6 +198,9 @@ public class Vehicle extends PolicyHolder {
         printBorder(119);
     }
 
+    /**
+     * Validation for the year purchase of the vehicle
+     */
     public void validationVehiclePurchaseYear(){
             int today = LocalDate.now().getYear();
             int years = today - year;
