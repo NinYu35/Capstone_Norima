@@ -7,13 +7,12 @@
  */
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.time.Period;
 
 public class PolicyHolder extends Validations {
     PASDriver main = new PASDriver();
     Policy policy = new Policy("", "", "", "", 0);
     public String firstName, lastName, address, driversLicenseNum, accType, uuid;
-    public double accurateNoOfYears;
     public LocalDate dateOfBirth, driversLicenseIssued;
 
 
@@ -64,15 +63,16 @@ public class PolicyHolder extends Validations {
     }
 
     /**
-     * Get the accurate years in between the driver license issued date and today's date
+     * Get the no. of years in between the driver license issued date and today's date
      * @return accurate number of years
      */
-    public double getDlx() {
+    public int getDlx() {
         LocalDate today = LocalDate.now();
-        double days = ChronoUnit.DAYS.between(driversLicenseIssued, today);
-        accurateNoOfYears = days / 365;
-        return accurateNoOfYears;
+        Period period = Period.between(driversLicenseIssued, today);
+        return period.getYears();
     }
+
+
     /**
      * Validate if the input of first name and last name in PolicyHolder is same as the customer's account name.
      * A relationship is asked if not the same name

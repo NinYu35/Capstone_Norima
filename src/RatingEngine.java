@@ -20,28 +20,30 @@ public class RatingEngine {
      */
     public double getVpf(int year) {
         ageOfVehicle = LocalDate.now().getYear() - year;
-        if (ageOfVehicle <= 1) {
+        if (ageOfVehicle < 1) {
             return 0.01;
         }
-        if (ageOfVehicle <= 3) {
+        if (ageOfVehicle < 3) {
             return 0.008;
         }
-        if (ageOfVehicle <= 5) {
+        if (ageOfVehicle < 5) {
             return 0.007;
         }
-        if (ageOfVehicle <= 10) {
+        if (ageOfVehicle < 10) {
             return 0.006;
         }
-        if (ageOfVehicle <= 15) {
+        if (ageOfVehicle < 15) {
             return 0.004;
         }
-        if (ageOfVehicle <= 20) {
+        if (ageOfVehicle < 20) {
             return 0.002;
         }
-        if (ageOfVehicle <= 40) {
+        if (ageOfVehicle < 40) {
+
             return 0.001;
         }
         return vpf;
+
     }
 
     /**

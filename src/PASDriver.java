@@ -21,6 +21,7 @@ public class PASDriver extends Helper {
                 "", 0.0);
         main.menuChoice();
         input.close();
+
     }
 
 
@@ -67,6 +68,7 @@ public class PASDriver extends Helper {
                 default:
                     printError("Invalid input! Please Enter (1-8) of your Choice.");
                     menuChoice();
+                    
             }
 
         } catch (Exception e) {
