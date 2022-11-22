@@ -69,7 +69,11 @@ public class PolicyHolder extends Validations {
     public int getDlx() {
         LocalDate today = LocalDate.now();
         Period period = Period.between(driversLicenseIssued, today);
-        return period.getYears();
+        int dlx = period.getYears();
+        if (dlx == 0){
+            dlx = 1;
+        }
+        return dlx;
     }
 
 
